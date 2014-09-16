@@ -1,5 +1,5 @@
 #ifndef HEADER_FILE
 #define HEADER_FILE 
-inline unsigned long long rdtsc();
+uint64_t rdtsc();
 void simple_time();
 #endif
