@@ -24,17 +24,14 @@ void simple_time(){
   uint64_t stop = rdtsc(); 
   unsigned int lo = start & (((uint64_t)2 << 32) - 1);
   unsigned int lo2 = stop & (((int64_t)2 << 32) - 1); 
-  int time = lo2 - lo; 
-  float t = ((float) (time));
-  t = t/3591338000.0;
-  uint32_t cycles = stop - start; 
-  
-
+  int cycles = lo2 - lo; 
+  float t = ((float) (cycles));
+  float factor = 3591338000.0  * .000001;
+  t = t / factor; 
   printf("the start is %llu\n", start);
   printf("the stop is %llu\n", stop);
-  printf("cycles : %llu\n", cycles);
-  printf("time : %d\n", time); 
-  printf("t : %f\n", t);
+  printf("cycles : %d\n", cycles); 
+  printf("time in microseconds : %f\n", t);
 }
 
 int main (int agrc, char ** argv){ 
