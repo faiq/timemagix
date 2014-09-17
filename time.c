@@ -11,25 +11,30 @@ inline uint64_t rdtsc() {
   __asm__  __volatile__(
      "cpuid \n"
      "rdtsc" 
-   : "=a"(lo), "=d"(hi) /* outputs */
-   :                    /* inputs */
-   : "%ebx", "%ecx");     /* clobbers*/
+   : "=a"(lo), "=d"(hi) 
+   :                    
+   : "%ebx", "%ecx");     
   return ((((uint64_t)hi) << 32) | lo);
 }
 
 void simple_time(){ 
   struct timeval begin;
   uint64_t start = rdtsc(); 
-  //int pid = getppid(); 
   gettimeofday(&begin, NULL);
   uint64_t stop = rdtsc(); 
-  uint64_t cycles = (uint64_t)stop - start;
-  unsigned long long ans = cycles/3591338000;
-  //printf("The process id is %d\n", pid);
+  unsigned int lo = start & (((uint64_t)2 << 32) - 1);
+  unsigned int lo2 = stop & (((int64_t)2 << 32) - 1); 
+  int time = lo2 - lo; 
+  float t = ((float) (time));
+  t = t/3591338000.0;
+  uint32_t cycles = stop - start; 
+  
+
   printf("the start is %llu\n", start);
   printf("the stop is %llu\n", stop);
-  printf("The time it took to execute is %llu\n", ans);
-  printf("%" PRIu64 "\n", cycles); 
+  printf("cycles : %llu\n", cycles);
+  printf("time : %d\n", time); 
+  printf("t : %f\n", t);
 }
 
 int main (int agrc, char ** argv){ 
