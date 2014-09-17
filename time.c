@@ -65,7 +65,7 @@ float * simple_time(){
   for (i =0; i < 10; i++){ 
     float res;
     res=clock_ppid(); 
-    printf("miliseconds for the call clockppid %f\n", res);
+    printf("microseconds for the call clockppid %f\n", res);
     sum+=res;
   }
   float avg1 = sum/10;
@@ -75,7 +75,7 @@ float * simple_time(){
   for (i = 0; i < 10; i++){ 
     float res;
     res = clock_pid();
-    printf("miliseconds for the call clockpid %f\n", res);
+    printf("microseconds for the call clockpid %f\n", res);
     sum+=res;
   } 
   float avg2 = sum/10; 
@@ -85,7 +85,7 @@ float * simple_time(){
   for (i = 0; i < 10; i++){ 
     float res;
     res = clock_time_of_day();
-    printf("miliseconds for the call clocktimeofday%f\n", res);
+    printf("microseconds for the call clocktimeofday%f\n", res);
     sum+=res;
   } 
   float avg3 = sum/10; 
@@ -98,5 +98,5 @@ float * simple_time(){
 int main (int agrc, char ** argv){ 
   float * a = simple_time();
   int i;
-  for (i =0; i < 3; i++) printf("%f\n", a[i]);
+  for (i =0; i < 3; i++) printf("average time is %f\n", a[i]);
 } 
