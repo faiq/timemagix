@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <unistd.h> 
 #include <stdint.h>
 #include <sys/time.h> 
@@ -92,11 +93,40 @@ float * simple_time(){
   retArray[2] = avg2;
   
   return retArray; 
-  
 }
+
+float read_time(char * file){ 
+  int fd,rd;
+  struct stat *buf;
+  buf = malloc(sizeof(struct stat));
+  fd=open(file,"O_RDONLY"); //get file descriptor
+  if(fd>1){
+    stat(file, buf);
+    int size = buf->st_size;
+    printf("this is size %d\n",size);
+    free(buf); 
+    char buff[size];
+    uint64_t start = rdtsc(); 
+    rd=read(fd,buff,size);
+    uint64_t stop = rdtsc(); 
+    unsigned int lo = start & (((uint64_t)2 << 32) - 1);
+    unsigned int lo2 = stop & (((int64_t)2 << 32) - 1); 
+    int cycles = lo2 - lo; 
+    float t = ((float) (cycles));
+    float factor = 3591338000.0  * .000001;
+    t = t / factor; 
+    return t;
+  }else{ 
+    printf("Error with open");
+    free(buf);
+    return -1;
+  } 
+} 
 
 int main (int agrc, char ** argv){ 
   float * a = simple_time();
   int i;
   for (i =0; i < 3; i++) printf("average time is %f\n", a[i]);
+  char * file = argv[1];
+  float time = read_time(file); 
 } 
